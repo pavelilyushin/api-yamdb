@@ -91,7 +91,23 @@ class Review(models.Model):
         on_delete=models.CASCADE,
     )
     rewiew_pub_date = models.DateTimeField(
-        verbose_name='Дата публикации',
+        verbose_name='Дата публикации отзыва',
         auto_now_add=True
     )
     review_text = models.TextField()
+
+
+class Comment(models.Model):
+    review = models.ForeignKey(
+        Review,
+        on_delete=models.CASCADE,
+    )
+    comment_author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    comment_pub_date = models.DateTimeField(
+        verbose_name='Дата публикации коммента',
+        auto_now_add=True
+    )
+    comment_text = models.TextField()
