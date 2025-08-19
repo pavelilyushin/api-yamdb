@@ -82,15 +82,15 @@ class TitleGenre(models.Model):
 
 
 class Review(models.Model):
-    rewiew_title = models.ForeignKey(
+    review_title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
     )
-    rewiew_author = models.ForeignKey(
+    review_author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
     )
-    rewiew_pub_date = models.DateTimeField(
+    review_pub_date = models.DateTimeField(
         verbose_name='Дата публикации отзыва',
         auto_now_add=True
     )
