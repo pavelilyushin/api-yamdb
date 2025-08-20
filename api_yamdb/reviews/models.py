@@ -100,9 +100,8 @@ class Review(models.Model):
         verbose_name='Дата публикации отзыва',
         auto_now_add=True
     )
-    score = models.PositiveSmallIntegerField(
+    score = models.IntegerField(
         verbose_name='Оценка',
-        help_text='Оценка произведения, в диапазоне от 1 до 10',
         validators=[
             MaxValueValidator(10),
             MinValueValidator(1)
@@ -126,4 +125,4 @@ class Comment(models.Model):
         verbose_name='Дата публикации коммента',
         auto_now_add=True
     )
-    text = models.TextField(verbose_name='Текс комментария')
+    text = models.TextField(verbose_name='Текст комментария')
