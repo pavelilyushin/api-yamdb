@@ -1,7 +1,7 @@
 from rest_framework import mixins, viewsets
 
 from .serializers import (
-    CategorySerializer, GenreSerializer, TitleSerializer
+    CategorySerializer, GenreSerializer, TitlePostMethodSerializer, TitleSerializer
 )
 from reviews.models import Category, Genre, Title
 
@@ -27,4 +27,8 @@ class GenreViewSet(CreateDestroyListViewSet):
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
-    serializer_class = TitleSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return TitleSerializer
+        return TitlePostMethodSerializer

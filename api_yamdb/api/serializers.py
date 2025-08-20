@@ -16,13 +16,46 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class TitleSerializer(serializers.ModelSerializer):
+    genre = GenreSerializer(many=True)
+    category = CategorySerializer()
+
+    class Meta:
+        model = Title
+        fields = (
+            'id',
+            'name',
+            'description',
+            'year',
+            'category',
+            'genre',
+        )
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['category'] = {
+            'name': instance.category.name,
+            'slug': instance.category.slug,
+        }
+        data['genre'] = [{
+            'name': genre.name,
+            'slug': genre.slug
+        } for genre in instance.genre.all()]
+        return data
+
+
+class TitlePostMethodSerializer(serializers.ModelSerializer):
     genre = serializers.SlugRelatedField(
         slug_field='slug', queryset=Genre.objects.all(), many=True
+    )
+    category = serializers.SlugRelatedField(
+        slug_field='slug',
+        queryset=Category.objects.all(),
     )
 
     class Meta:
         model = Title
         fields = (
+            'id',
             'name',
             'description',
             'year',
@@ -35,3 +68,6 @@ class TitleSerializer(serializers.ModelSerializer):
         if not (value <= year):
             raise serializers.ValidationError('Проверьте год выпуска!')
         return value
+
+    def to_representation(self, instance):
+        return TitleSerializer(instance).data
