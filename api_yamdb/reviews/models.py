@@ -9,15 +9,11 @@ class Category(models.Model):
         max_length=256,
         verbose_name='Название категории',
     )
-<<<<<<< HEAD
-    slug = models.SlugField(unique=True, verbose_name='Слаг категории')
-=======
     slug = models.SlugField(
         unique=True,
         verbose_name='Слаг категории',
         max_length=50
     )
->>>>>>> bfbc223 (changed models, add readme, ad serializers,views,urls. not finished)
 
     def __str__(self):
         return self.name[:MAX_LENGTH]
@@ -33,15 +29,11 @@ class Genre(models.Model):
         max_length=256,
         verbose_name='Название жанра',
     )
-<<<<<<< HEAD
-    slug = models.SlugField(verbose_name='Слаг жанра')
-=======
     slug = models.SlugField(
         verbose_name='Слаг жанра',
         unique=True,
         max_length=50
     )
->>>>>>> bfbc223 (changed models, add readme, ad serializers,views,urls. not finished)
 
     def __str__(self):
         return self.name[:MAX_LENGTH]
@@ -62,12 +54,8 @@ class Title(models.Model):
     year = models.IntegerField(verbose_name='Год выпуска')
     category = models.ForeignKey(
         Category,
-<<<<<<< HEAD
-        on_delete=models.CASCADE,
-=======
         null=True,
         on_delete=models.SET_NULL,
->>>>>>> bfbc223 (changed models, add readme, ad serializers,views,urls. not finished)
         verbose_name='Категория',
     )
     genre = models.ManyToManyField(

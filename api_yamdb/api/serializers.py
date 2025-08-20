@@ -6,16 +6,26 @@ from reviews.models import Category, Genre, Title
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ('name', 'slug')
 
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
-        fields = '__all__'
+        fields = ('name', 'slug')
 
 
 class TitleSerializer(serializers.ModelSerializer):
+    genre = serializers.SlugRelatedField(
+        slug_field='slug', queryset=Genre.objects.all(), many=True
+    )
+
     class Meta:
         model = Title
-        fields = '__all__'
+        fields = (
+            'name',
+            'description',
+            'year',
+            'category',
+            'genre',
+        )
