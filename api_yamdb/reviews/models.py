@@ -1,4 +1,6 @@
 from django.db import models
+# Валидаторы для оценки от 1 до 10
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 # Добавил получение модели пользователя
@@ -82,32 +84,46 @@ class TitleGenre(models.Model):
 
 
 class Review(models.Model):
-    review_title = models.ForeignKey(
+    title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
+        verbose_name='Произведение',
+        related_name='reviews',
     )
-    review_author = models.ForeignKey(
+    text = models.TextField(verbose_name='Текст отзыва')
+    author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        verbose_name='Автор'
     )
     review_pub_date = models.DateTimeField(
         verbose_name='Дата публикации отзыва',
         auto_now_add=True
     )
-    review_text = models.TextField()
+    score = models.PositiveSmallIntegerField(
+        verbose_name='Оценка',
+        help_text='Оценка произведения, в диапазоне от 1 до 10',
+        validators=[
+            MaxValueValidator(10),
+            MinValueValidator(1)
+        ]
+    )
 
 
 class Comment(models.Model):
     review = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name='Отзыв'
     )
-    comment_author = models.ForeignKey(
+    comment = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        verbose_name='Автор'
     )
     comment_pub_date = models.DateTimeField(
         verbose_name='Дата публикации коммента',
         auto_now_add=True
     )
-    comment_text = models.TextField()
+    text = models.TextField(verbose_name='Текс комментария')
