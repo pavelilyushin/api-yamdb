@@ -1,5 +1,7 @@
 from rest_framework import mixins, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
 
+from .filters import TitleFilter
 from .serializers import (
     CategorySerializer, GenreSerializer, TitlePostMethodSerializer, TitleSerializer
 )
@@ -27,6 +29,9 @@ class GenreViewSet(CreateDestroyListViewSet):
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TitleFilter
+    filterset_fields = ('name', 'year', 'category', 'genre')
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
