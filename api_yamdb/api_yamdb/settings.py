@@ -28,8 +28,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_filters',
     'reviews.apps.ReviewsConfig',
     'api.apps.ApiConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -131,5 +133,8 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=JWT_REFRESH_TOKEN_LIFETIME_DAYS),
     'SIGNING_KEY': SECRET_KEY,
 }
+
+# Кастомная модель пользователя
+AUTH_USER_MODEL = 'users.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
