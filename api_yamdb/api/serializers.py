@@ -1,6 +1,7 @@
 from rest_framework import serializers
 import datetime as dt
-from reviews.models import Category, Genre, Title
+
+from reviews.models import Category, Genre, Title, Review, Comment
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -71,3 +72,16 @@ class TitlePostMethodSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return TitleSerializer(instance).data
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ('id', 'review_author', 'review_title', 'review_pub_date',
+                  'review_text')
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id', 'comment_author', 'comment_pub_date', 'comment_text')

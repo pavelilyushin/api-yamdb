@@ -1,4 +1,11 @@
 from django.db import models
+# Валидаторы для оценки от 1 до 10
+from django.core.validators import MaxValueValidator, MinValueValidator
+
+
+# Добавил получение модели пользователя
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 MAX_LENGTH = 25
@@ -86,3 +93,49 @@ class TitleGenre(models.Model):
 
     def __str__(self):
         return f'{self.title} - {self.genre}'
+    
+
+class Review(models.Model):
+    title = models.ForeignKey(
+        Title,
+        on_delete=models.CASCADE,
+        verbose_name='Произведение',
+        related_name='reviews',
+    )
+    text = models.TextField(verbose_name='Текст отзыва')
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Автор'
+    )
+    review_pub_date = models.DateTimeField(
+        verbose_name='Дата публикации отзыва',
+        auto_now_add=True
+    )
+    score = models.IntegerField(
+        verbose_name='Оценка',
+        validators=[
+            MaxValueValidator(10),
+            MinValueValidator(1)
+        ]
+    )
+
+
+class Comment(models.Model):
+    review = models.ForeignKey(
+        Review,
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name='Отзыв'
+    )
+    comment = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Автор'
+    )
+    comment_pub_date = models.DateTimeField(
+        verbose_name='Дата публикации коммента',
+        auto_now_add=True
+    )
+    text = models.TextField(verbose_name='Текст комментария')
+    
