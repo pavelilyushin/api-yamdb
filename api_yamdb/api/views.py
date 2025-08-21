@@ -1,8 +1,14 @@
-from rest_framework import mixins, viewsets
+from rest_framework import filters, mixins, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import get_object_or_404
 
+from .filters import TitleFilter
 from .serializers import (
-    CategorySerializer, GenreSerializer, TitleSerializer, ReviewSerializer,
+    CategorySerializer,
+    GenreSerializer,
+    TitlePostMethodSerializer,
+    TitleSerializer,
+    ReviewSerializer,
     CommentSerializer
 )
 from reviews.models import Category, Genre, Title, Review, Comment
@@ -20,16 +26,27 @@ class CreateDestroyListViewSet(
 class CategoryViewSet(CreateDestroyListViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('slug',)
 
 
 class GenreViewSet(CreateDestroyListViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('slug',)
 
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
-    serializer_class = TitleSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TitleFilter
+    filterset_fields = ('name', 'year',)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return TitleSerializer
+        return TitlePostMethodSerializer
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

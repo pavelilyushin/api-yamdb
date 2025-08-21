@@ -16,7 +16,11 @@ class Category(models.Model):
         max_length=256,
         verbose_name='Название категории',
     )
-    slug = models.SlugField(unique=True, verbose_name='Слаг категории')
+    slug = models.SlugField(
+        unique=True,
+        verbose_name='Слаг категории',
+        max_length=50
+    )
 
     def __str__(self):
         return self.name[:MAX_LENGTH]
@@ -32,7 +36,11 @@ class Genre(models.Model):
         max_length=256,
         verbose_name='Название жанра',
     )
-    slug = models.SlugField(verbose_name='Слаг жанра')
+    slug = models.SlugField(
+        verbose_name='Слаг жанра',
+        unique=True,
+        max_length=50
+    )
 
     def __str__(self):
         return self.name[:MAX_LENGTH]
@@ -53,7 +61,8 @@ class Title(models.Model):
     year = models.IntegerField(verbose_name='Год выпуска')
     category = models.ForeignKey(
         Category,
-        on_delete=models.CASCADE,
+        null=True,
+        on_delete=models.SET_NULL,
         verbose_name='Категория',
     )
     genre = models.ManyToManyField(
@@ -82,6 +91,9 @@ class TitleGenre(models.Model):
         on_delete=models.CASCADE,
     )
 
+    def __str__(self):
+        return f'{self.title} - {self.genre}'
+    
 
 class Review(models.Model):
     title = models.ForeignKey(
@@ -126,3 +138,4 @@ class Comment(models.Model):
         auto_now_add=True
     )
     text = models.TextField(verbose_name='Текст комментария')
+    
