@@ -6,3 +6,6 @@ USER_CONFIRMATION_CODE_MAX_LENGTH = 100
 CONFIRMATION_CODE_LENGTH = 6
 
 USERNAME_PATTERN = r'^[\w.@+-]+\Z'
+
+# Дополнительные константы для сериализаторов
+USERNAME_MAX_LENGTH = 150
