@@ -27,7 +27,7 @@ class CategoryViewSet(CreateDestroyListViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('slug',)
+    search_fields = ('name',)
 
 
 class GenreViewSet(CreateDestroyListViewSet):
