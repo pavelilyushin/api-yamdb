@@ -74,7 +74,24 @@ API YaMDb представляет собой REST API на базе Django Rest
    python3 manage.py migrate
    ```
 
-6. **Запустите проект:**
+6. **Загрузите данные в базу (опционально):**
+
+   Для Windows:
+   ```bash
+   python manage.py load_csv <имя файла>
+   ```
+   
+   Для Unix-подобных систем:
+   ```bash
+   python3 manage.py load_csv <имя файла>
+   ```
+
+   Файлы данных размещены в директории /static/data/, пример команды:
+   ```bash
+   python3 manage.py load_csv category.csv
+   ```
+
+7. **Запустите проект:**
    
    Для Windows:
    ```bash
