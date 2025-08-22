@@ -41,7 +41,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
-    filterset_fields = ('name', 'year',)
+    http_method_names = ('get', 'post', 'delete', 'patch', 'head', 'options')
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
