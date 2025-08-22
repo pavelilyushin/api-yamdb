@@ -34,7 +34,7 @@ class GenreViewSet(CreateDestroyListViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('slug',)
+    search_fields = ('name',)
 
 
 class TitleViewSet(viewsets.ModelViewSet):
