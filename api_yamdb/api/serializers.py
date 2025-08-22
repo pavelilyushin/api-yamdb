@@ -77,11 +77,11 @@ class TitlePostMethodSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ('id', 'review_author', 'review_title', 'review_pub_date',
-                  'review_text')
+        fields = ('id', 'author', 'title', 'pub_date',
+                  'text')
 
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ('id', 'comment_author', 'comment_pub_date', 'comment_text')
+        fields = ('id', 'author', 'pub_date', 'text')

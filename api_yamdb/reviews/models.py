@@ -93,7 +93,7 @@ class TitleGenre(models.Model):
 
     def __str__(self):
         return f'{self.title} - {self.genre}'
-    
+
 
 class Review(models.Model):
     title = models.ForeignKey(
@@ -108,7 +108,7 @@ class Review(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Автор'
     )
-    review_pub_date = models.DateTimeField(
+    pub_date = models.DateTimeField(
         verbose_name='Дата публикации отзыва',
         auto_now_add=True
     )
@@ -128,14 +128,13 @@ class Comment(models.Model):
         related_name='comments',
         verbose_name='Отзыв'
     )
-    comment = models.ForeignKey(
+    author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='Автор'
     )
-    comment_pub_date = models.DateTimeField(
+    pub_date = models.DateTimeField(
         verbose_name='Дата публикации коммента',
         auto_now_add=True
     )
     text = models.TextField(verbose_name='Текст комментария')
-    
