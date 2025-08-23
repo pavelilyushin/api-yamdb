@@ -29,6 +29,7 @@ class TitleSerializer(serializers.ModelSerializer):
             'year',
             'category',
             'genre',
+            'rating'
         )
 
     def to_representation(self, instance):

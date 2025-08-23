@@ -74,6 +74,13 @@ class Title(models.Model):
     def __str__(self):
         return self.name[:MAX_LENGTH]
 
+    @property
+    def rating(self):
+        reviews = self.reviews.all()
+        if not reviews:
+            return None
+        return sum(review.score for review in reviews) / len(reviews)
+
     class Meta:
         default_related_name = 'titles'
         ordering = ('name',)
