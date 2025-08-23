@@ -1,6 +1,7 @@
 from rest_framework import filters, mixins, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import get_object_or_404
+from rest_framework import permissions
 
 from .filters import TitleFilter
 from .serializers import (
@@ -12,6 +13,22 @@ from .serializers import (
     CommentSerializer
 )
 from reviews.models import Category, Genre, Title, Review, Comment
+
+
+class AdminModerAuthorOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return (
+            request.method in permissions.SAFE_METHODS
+            or request.user.is_authenticated
+        )
+
+    def has_object_permission(self, request, view, obj):
+        return (
+            request.method in permissions.SAFE_METHODS
+            or request.user.is_moderator
+            or request.user.is_admin
+            or obj.author == request.user
+        )
 
 
 class CreateDestroyListViewSet(
@@ -53,6 +70,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
+    permission_classes = (AdminModerAuthorOrReadOnly,)
 
     def get_title(self):
         title_id = self.kwargs.get('title_id')
@@ -77,6 +95,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
+    permission_classes = (AdminModerAuthorOrReadOnly,)
 
     def get_review(self):
         title_id = self.kwargs.get('title_id')

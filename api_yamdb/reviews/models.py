@@ -120,6 +120,10 @@ class Review(models.Model):
         ]
     )
 
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['title', 'author'],
+                                               name='unique_review')]
+
 
 class Comment(models.Model):
     review = models.ForeignKey(
