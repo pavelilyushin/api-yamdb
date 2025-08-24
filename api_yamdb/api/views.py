@@ -1,7 +1,6 @@
 from rest_framework import filters, mixins, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import get_object_or_404
-from rest_framework import permissions
 
 from .filters import TitleFilter
 from .serializers import (
@@ -13,22 +12,7 @@ from .serializers import (
     CommentSerializer
 )
 from reviews.models import Category, Genre, Title, Review, Comment
-
-
-class AdminModerAuthorOrReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return (
-            request.method in permissions.SAFE_METHODS
-            or request.user.is_authenticated
-        )
-
-    def has_object_permission(self, request, view, obj):
-        return (
-            request.method in permissions.SAFE_METHODS
-            or request.user.is_moderator
-            or request.user.is_admin
-            or obj.author == request.user
-        )
+from .permissions import AdminModerAuthorOrReadOnly, IsAdminOrReadOnly
 
 
 class CreateDestroyListViewSet(
@@ -43,6 +27,8 @@ class CreateDestroyListViewSet(
 class CategoryViewSet(CreateDestroyListViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    lookup_field = 'slug'
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
 
@@ -50,12 +36,15 @@ class CategoryViewSet(CreateDestroyListViewSet):
 class GenreViewSet(CreateDestroyListViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    lookup_field = 'slug'
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
 
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
+    permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
     http_method_names = ('get', 'post', 'delete', 'patch', 'head', 'options')
@@ -67,7 +56,7 @@ class TitleViewSet(viewsets.ModelViewSet):
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
-    queryset = Review.objects.all()
+    queryset = Review.objects.all().order_by('id')
     serializer_class = ReviewSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = (AdminModerAuthorOrReadOnly,)
@@ -92,7 +81,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
+    queryset = Comment.objects.all().order_by('id')
     serializer_class = CommentSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = (AdminModerAuthorOrReadOnly,)
