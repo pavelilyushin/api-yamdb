@@ -31,8 +31,8 @@ class Test00UserRegistration:
         response_json = response.json()
         empty_fields = ['email', 'username']
         for field in empty_fields:
-            assert (field in response_json
-                    and isinstance(response_json.get(field), list)), (
+            assert (field in response_json and
+                    isinstance(response_json.get(field), list)), (
                 f'Если в POST-запросе к `{self.URL_SIGNUP}` не переданы '
                 'необходимые данные, в ответе должна возвращаться информация '
                 'об обязательных для заполнения полях.'
@@ -63,8 +63,8 @@ class Test00UserRegistration:
         response_json = response.json()
         invalid_fields = ['email', 'username']
         for field in invalid_fields:
-            assert (field in response_json
-                    and isinstance(response_json.get(field), list)), (
+            assert (field in response_json and
+                    isinstance(response_json.get(field), list)), (
                 f'Если в  POST-запросе к `{self.URL_SIGNUP}` переданы '
                 'некорректные данные, в ответе должна возвращаться информация '
                 'о неправильно заполненных полях.'
@@ -175,8 +175,8 @@ class Test00UserRegistration:
         )
         response_json = response.json()
         for field in valid_data:
-            assert (field in response_json
-                    and valid_data.get(field) == response_json.get(field)), (
+            assert (field in response_json and
+                    valid_data.get(field) == response_json.get(field)), (
                 'Если POST-запрос от имени администратора к эндпоинту  '
                 f'`{self.URL_ADMIN_CREATE_USER}` содержит корректные данные - '
                 'в ответе должна быть информация об '

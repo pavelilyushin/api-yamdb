@@ -1,11 +1,12 @@
 from pathlib import Path
 from datetime import timedelta
 
-from api_yamdb.constants import (
-    JWT_ACCESS_TOKEN_LIFETIME_DAYS,
-    JWT_REFRESH_TOKEN_LIFETIME_DAYS,
-    DEFAULT_PAGE_SIZE
-)
+# JWT настройки
+JWT_ACCESS_TOKEN_LIFETIME_DAYS = 1
+JWT_REFRESH_TOKEN_LIFETIME_DAYS = 7
+
+# Настройки пагинации
+DEFAULT_PAGE_SIZE = 10
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -67,11 +68,6 @@ WSGI_APPLICATION = 'api_yamdb.wsgi.application'
 
 # Django Rest Framework settings
 
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5,
-}
-
 # Database
 
 DATABASES = {
@@ -86,16 +82,28 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'MinimumLengthValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'CommonPasswordValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'NumericPasswordValidator'
+        ),
     },
 ]
 
@@ -128,7 +136,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': (
+        'rest_framework.pagination.PageNumberPagination'
+    ),
     'PAGE_SIZE': DEFAULT_PAGE_SIZE,
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
