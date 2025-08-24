@@ -71,6 +71,7 @@ class Title(models.Model):
         verbose_name='Жанр',
     )
 
+
     def __str__(self):
         return self.name[:MAX_LENGTH]
 
