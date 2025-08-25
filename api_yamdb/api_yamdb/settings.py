@@ -130,7 +130,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
 
-DATA_TO_LOAD_DIR = BASE_DIR / 'static/da'
+DATA_TO_LOAD_DIR = BASE_DIR / 'static/data/'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

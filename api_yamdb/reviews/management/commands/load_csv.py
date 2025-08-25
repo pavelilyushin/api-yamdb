@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 from reviews.models import (
     Category,
-    Comments,
+    Comment,
     Genre,
     Review,
     Title,
@@ -26,7 +26,7 @@ class Command(BaseCommand):
         csv_files = kwargs['csv_files']
         equals = {
             'category.csv': Category,
-            'comments.csv': Comments,
+            'comments.csv': Comment,
             'genre_title.csv': TitleGenre,
             'genre.csv': Genre,
             'review.csv': Review,
