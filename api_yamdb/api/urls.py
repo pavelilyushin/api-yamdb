@@ -1,5 +1,3 @@
-"""URL-маршруты для API."""
-
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
@@ -12,26 +10,29 @@ from .views import (
     CommentViewSet
 )
 
-router_v1 = DefaultRouter()
-router_v1.register('users', UserViewSet)
-router_v1.register(r'categories', CategoryViewSet, basename='categories')
-router_v1.register(r'genres', GenreViewSet, basename='genres')
-router_v1.register(r'titles', TitleViewSet, basename='titles')
-router_v1.register(
+router = DefaultRouter()
+router.register('users', UserViewSet)
+router.register(r'categories', CategoryViewSet, basename='categories')
+router.register(r'genres', GenreViewSet, basename='genres')
+router.register(r'titles', TitleViewSet, basename='titles')
+router.register(
     r'titles/(?P<title_id>\d+)/reviews',
     ReviewViewSet,
     basename='reviews'
 )
-router_v1.register(
+router.register(
     r'titles/(?P<title_id>\d+)/reviews/(?P<reviews_id>\d+)/comments',
     CommentViewSet,
     basename='comments'
 )
 
 urlpatterns = [
-    path('', include(router_v1.urls)),
-    path('v1/', include(router_v1.urls)),
-    path('auth/signup/', SignUpView.as_view(), name='signup'),
-    path('auth/token/', TokenView.as_view(), name='token'),
-
+    path('', include(router.urls)),
+    # path('auth/signup/', SignUpView.as_view(), name='signup'),
+    # path('auth/token/', TokenView.as_view(), name='token'),
+    path('v1/', include([
+        path('', include(router.urls)),
+        path('auth/signup/', SignUpView.as_view(), name='signup_v1'),
+        path('auth/token/', TokenView.as_view(), name='token_v1'),
+    ])),
 ]
