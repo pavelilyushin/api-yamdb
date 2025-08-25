@@ -11,8 +11,8 @@ from tests.utils import (
 @pytest.mark.django_db(transaction=True)
 class Test03GenreAPI:
 
-    GENRES_URL = '/api/genres/'
-    GENRES_SLUG_TEMPLATE_URL = '/api/genres/{slug}/'
+    GENRES_URL = '/api/v1/genres/'
+    GENRES_SLUG_TEMPLATE_URL = '/api/v1/genres/{slug}/'
 
     def test_01_genre_not_auth(self, client):
         response = client.get(self.GENRES_URL)
