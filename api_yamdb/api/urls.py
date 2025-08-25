@@ -1,5 +1,3 @@
-"""URL-маршруты для API."""
-
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
@@ -30,8 +28,9 @@ router_v1.register(
 
 urlpatterns = [
     path('', include(router_v1.urls)),
-    path('v1/', include(router_v1.urls)),
-    path('auth/signup/', SignUpView.as_view(), name='signup'),
-    path('auth/token/', TokenView.as_view(), name='token'),
-
+    path('v1/', include([
+        path('', include(router_v1.urls)),
+        path('auth/signup/', SignUpView.as_view(), name='signup_v1'),
+        path('auth/token/', TokenView.as_view(), name='token_v1'),
+    ])),
 ]

@@ -11,8 +11,8 @@ from tests.utils import (
 @pytest.mark.django_db(transaction=True)
 class Test02CategoryAPI:
 
-    CATEGORY_URL = '/api/categories/'
-    CATEGORY_SLUG_TEMPLATE_URL = '/api/categories/{slug}/'
+    CATEGORY_URL = '/api/v1/categories/'
+    CATEGORY_SLUG_TEMPLATE_URL = '/api/v1/categories/{slug}/'
 
     def test_01_category_not_auth(self, client):
         response = client.get(self.CATEGORY_URL)

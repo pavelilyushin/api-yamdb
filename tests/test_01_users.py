@@ -10,8 +10,8 @@ from tests.utils import (
 @pytest.mark.django_db(transaction=True)
 class Test01UserAPI:
 
-    USERS_URL = '/api/users/'
-    USERS_ME_URL = '/api/users/me/'
+    USERS_URL = '/api/v1/users/'
+    USERS_ME_URL = '/api/v1/users/me/'
     VALID_DATA_FOR_USER_CREATION = [
         (
             {
