@@ -70,7 +70,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         title = self.get_title()
-        return title.reviews.all().order_by('id')
+        return title.reviews.all().order_by('id') # Сортировку стоит задать на уровне модели.
 
     def perform_create(self, serializer):
         title = self.get_title()
@@ -88,7 +88,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def get_review(self):
         title_id = self.kwargs.get('title_id')
-        review_id = self.kwargs.get('reviews_id')
+        review_id = self.kwargs.get('reviews_id') # Получайте объекты. Чтобы вернуть 404, если некорректный адрес
         return get_object_or_404(
             Review,
             pk=review_id,

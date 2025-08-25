@@ -1,5 +1,6 @@
-from rest_framework import serializers
 import datetime as dt
+
+from rest_framework import serializers
 
 from reviews.models import Category, Genre, Title, Review, Comment
 
@@ -32,7 +33,7 @@ class TitleSerializer(serializers.ModelSerializer):
             'rating'
         )
 
-    def to_representation(self, instance):
+    def to_representation(self, instance): # Избыточно. Достаточно все на уровне полей.
         data = super().to_representation(instance)
         data['category'] = {
             'name': instance.category.name,
@@ -87,7 +88,7 @@ class ReviewSerializer(serializers.ModelSerializer):
             return data
         author = self.context.get('request').user
         title_id = self.context.get('view').kwargs.get('title_id')
-        if Review.objects.filter(author=author, title=title_id).exists():
+        if Review.objects.filter(author=author, title=title_id).exists(): # Используй related_name
             raise serializers.ValidationError(
                 'Ваш отзыв уже засчитан'
             )

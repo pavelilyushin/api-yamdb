@@ -8,6 +8,9 @@ JWT_REFRESH_TOKEN_LIFETIME_DAYS = 7
 # Настройки пагинации
 DEFAULT_PAGE_SIZE = 10
 
+# Настройки email
+DEFAULT_FROM_EMAIL = 'noreply@yamdb.com'
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
