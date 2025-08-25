@@ -2,24 +2,29 @@ from django.db import models
 # Валидаторы для оценки от 1 до 10
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-
 # Добавил получение модели пользователя
 from django.contrib.auth import get_user_model
+
+from .constants import (
+    MAX_LENGTH,
+    MAX_SCORE,
+    MIN_SCORE,
+    NAME_MAX_LENGTH,
+    SLUG_MAX_LENGTH,
+)
+
 User = get_user_model()
-
-
-MAX_LENGTH = 25
 
 
 class Category(models.Model):
     name = models.CharField(
-        max_length=256,
+        max_length=NAME_MAX_LENGTH,
         verbose_name='Название категории',
     )
     slug = models.SlugField(
         unique=True,
         verbose_name='Слаг категории',
-        max_length=50
+        max_length=SLUG_MAX_LENGTH
     )
 
     def __str__(self):
@@ -33,13 +38,13 @@ class Category(models.Model):
 
 class Genre(models.Model):
     name = models.CharField(
-        max_length=256,
+        max_length=NAME_MAX_LENGTH,
         verbose_name='Название жанра',
     )
     slug = models.SlugField(
         verbose_name='Слаг жанра',
         unique=True,
-        max_length=50
+        max_length=SLUG_MAX_LENGTH
     )
 
     def __str__(self):
@@ -52,7 +57,10 @@ class Genre(models.Model):
 
 
 class Title(models.Model):
-    name = models.CharField(max_length=256, verbose_name='Наименование')
+    name = models.CharField(
+        max_length=NAME_MAX_LENGTH,
+        verbose_name='Наименование'
+    )
     description = models.TextField(
         verbose_name='Описание',
         blank=True,
@@ -123,8 +131,8 @@ class Review(models.Model):
     score = models.IntegerField(
         verbose_name='Оценка',
         validators=[
-            MaxValueValidator(10),
-            MinValueValidator(1)
+            MaxValueValidator(MAX_SCORE),
+            MinValueValidator(MIN_SCORE)
         ]
     )
 

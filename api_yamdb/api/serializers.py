@@ -34,18 +34,6 @@ class TitleSerializer(serializers.ModelSerializer):
             'rating'
         )
 
-    def to_representation(self, instance): # Избыточно. Достаточно все на уровне полей.
-        data = super().to_representation(instance)
-        data['category'] = {
-            'name': instance.category.name,
-            'slug': instance.category.slug,
-        }
-        data['genre'] = [{
-            'name': genre.name,
-            'slug': genre.slug
-        } for genre in instance.genre.all()]
-        return data
-
 
 class TitlePostMethodSerializer(serializers.ModelSerializer):
     genre = serializers.SlugRelatedField(
@@ -72,9 +60,6 @@ class TitlePostMethodSerializer(serializers.ModelSerializer):
         if not (value <= year):
             raise serializers.ValidationError('Проверьте год выпуска!')
         return value
-
-    def to_representation(self, instance):
-        return TitleSerializer(instance).data
 
 
 class ReviewSerializer(serializers.ModelSerializer):
