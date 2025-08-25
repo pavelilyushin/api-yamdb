@@ -1,7 +1,7 @@
 """Разрешения для приложения users."""
 
 from rest_framework import permissions
-
+# Это все стоит перенести в api
 
 class IsAdminOrSuperuser(permissions.BasePermission):
     """Разрешение для администраторов и суперпользователей."""

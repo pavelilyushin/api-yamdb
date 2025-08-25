@@ -9,6 +9,8 @@ class TitleFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(field_name='name')
     year = django_filters.CharFilter(field_name='year')
 
+# Стандартные поля избыточно в полях указывать. Достаточно в Мета
+
     class Meta:
         model = Title
         fields = ('category', 'genre')

@@ -39,7 +39,7 @@ class UserMeSerializer(serializers.ModelSerializer):
         read_only_fields = ('role',)
 
 
-def _validate_username_pattern(value):
+def _validate_username_pattern(value): # Разве это сериализатор? Нет. Поэтому стоит перенести в соответствующий файл
     """Проверяет соответствие username паттерну."""
     if not re.match(USERNAME_PATTERN, value):
         raise serializers.ValidationError(
@@ -57,7 +57,7 @@ def _validate_username_reserved(value):
     return value
 
 
-class SignUpSerializer(serializers.Serializer):
+class SignUpSerializer(serializers.Serializer): # Нет проверки, что пользователь с таким именем и почтой уже есть
     """Сериализатор для регистрации пользователя."""
 
     username = serializers.CharField(max_length=USERNAME_MAX_LENGTH)

@@ -56,7 +56,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def _generate_confirmation_code():
+def _generate_confirmation_code(): # Утилиты не должны находиться во вью
     """Генерирует код подтверждения."""
     return ''.join(
         random.choices(
@@ -66,7 +66,7 @@ def _generate_confirmation_code():
     )
 
 
-def _validate_user_uniqueness(username, email):
+def _validate_user_uniqueness(username, email): # Подобная проверка должна быть на уровне сериализатора
     """Проверяет уникальность username и email."""
     existing_user_by_username = User.objects.filter(username=username).first()
     existing_user_by_email = User.objects.filter(email=email).first()
@@ -119,14 +119,12 @@ def signup(request):
 
     confirmation_code = _generate_confirmation_code()
 
-    # Создаем или обновляем пользователя
     _create_or_update_user(username, email, confirmation_code)
 
-    # Отправляем email
     send_mail(
         'Код подтверждения для YaMDb',
         f'Ваш код подтверждения: {confirmation_code}',
-        'noreply@yamdb.com',
+        'noreply@yamdb.com', # Адрес - в настройки
         [email]
     )
 
@@ -152,7 +150,7 @@ def token(request):
             status=status.HTTP_404_NOT_FOUND
         )
 
-    if user.confirmation_code != confirmation_code:
+    if user.confirmation_code != confirmation_code: # Валидацию стоит унести на уровень сериализатора
         return Response(
             {'error': 'Неверный код подтверждения'},
             status=status.HTTP_400_BAD_REQUEST
