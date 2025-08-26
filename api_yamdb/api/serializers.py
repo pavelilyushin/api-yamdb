@@ -76,7 +76,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         title = get_object_or_404(Title, pk=title_id)
         if (
             request.method == 'POST'
-            and Review.objects.filter(title=title, author=author).exists()
+            and title.reviews.filter(author=author).exists()
         ):
             raise serializers.ValidationError('Ваш отзыв уже засчитан')
         return data
