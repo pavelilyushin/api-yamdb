@@ -56,28 +56,17 @@ class TitleViewSet(viewsets.ModelViewSet):
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
-    queryset = Review.objects.all().order_by('id')
     serializer_class = ReviewSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = (AdminModerAuthorOrReadOnly,)
 
-    def get_title(self):
-        title_id = self.kwargs.get('title_id')
-        return get_object_or_404(
-            Title,
-            pk=title_id
-        )
-
     def get_queryset(self):
-        title = self.get_title()
-        return title.reviews.all().order_by('id') # Сортировку стоит задать на уровне модели.
+        title = get_object_or_404(Title, id=self.kwargs.get('title_id'))
+        return title.reviews.all()
 
     def perform_create(self, serializer):
-        title = self.get_title()
-        serializer.save(
-            title=title,
-            author=self.request.user
-        )
+        title = get_object_or_404(Title, id=self.kwargs.get('title_id'))
+        serializer.save(author=self.request.user, title=title)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -86,22 +75,14 @@ class CommentViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = (AdminModerAuthorOrReadOnly,)
 
-    def get_review(self):
-        title_id = self.kwargs.get('title_id')
-        review_id = self.kwargs.get('reviews_id') # Получайте объекты. Чтобы вернуть 404, если некорректный адрес
-        return get_object_or_404(
-            Review,
-            pk=review_id,
-            title__id=title_id
-        )
-
     def get_queryset(self):
-        review = self.get_review()
-        return review.comments.all().order_by('id')
+        review = get_object_or_404(
+            Review,
+            id=self.kwargs.get('reviews_id'))
+        return review.comments.all()
 
     def perform_create(self, serializer):
-        review = self.get_review()
-        serializer.save(
-            review=review,
-            author=self.request.user
-        )
+        review = get_object_or_404(
+            Review,
+            id=self.kwargs.get('reviews_id'))
+        serializer.save(author=self.request.user, review=review)

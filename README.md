@@ -60,21 +60,7 @@ API YaMDb представляет собой REST API на базе Django Rest
    cd api_yamdb
    ```
 
-5. **Подготовьте и примените миграции:**
-   
-   Для Windows:
-   ```bash
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
-   
-   Для Unix-подобных систем:
-   ```bash
-   python3 manage.py makemigrations
-   python3 manage.py migrate
-   ```
-
-6. **Загрузите данные в базу (опционально):**
+5. **Загрузите данные в базу (опционально):**
 
    Для Windows:
    ```bash
@@ -91,7 +77,7 @@ API YaMDb представляет собой REST API на базе Django Rest
    python3 manage.py load_csv category.csv
    ```
 
-7. **Запустите проект:**
+6. **Запустите проект:**
    
    Для Windows:
    ```bash
