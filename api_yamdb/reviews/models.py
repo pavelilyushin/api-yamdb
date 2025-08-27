@@ -1,8 +1,5 @@
 from django.db import models
-# Валидаторы для оценки от 1 до 10
 from django.core.validators import MaxValueValidator, MinValueValidator
-
-# Добавил получение модели пользователя
 from django.contrib.auth import get_user_model
 
 from .constants import (
@@ -159,4 +156,3 @@ class Comment(models.Model):
         auto_now_add=True
     )
     text = models.TextField(verbose_name='Текст комментария')
-
