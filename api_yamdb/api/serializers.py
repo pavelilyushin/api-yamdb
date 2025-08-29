@@ -69,6 +69,16 @@ class ReviewSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
+    class Meta:
+        model = Review
+        exclude = ('title',)
+
+    def validate_score(self, value):
+        if 0 > value > 10:
+            raise serializers.ValidationError(
+                f'Оценивать можно только от 0 до 10! {value} не приемлемо!')
+        return value
+
     def validate(self, data):
         request = self.context['request']
         author = request.user
@@ -80,10 +90,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         ):
             raise serializers.ValidationError('Ваш отзыв уже засчитан')
         return data
-
-    class Meta:
-        model = Review
-        exclude = ('title',)
 
 
 class CommentSerializer(serializers.ModelSerializer):
