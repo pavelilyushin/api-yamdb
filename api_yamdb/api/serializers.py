@@ -74,9 +74,9 @@ class ReviewSerializer(serializers.ModelSerializer):
         exclude = ('title',)
 
     def validate_score(self, value):
-        if 0 > value > 10:
+        if not (1 <= value <= 10):
             raise serializers.ValidationError(
-                f'Оценивать можно только от 0 до 10! {value} не приемлемо!')
+                f'Оценивать можно только от 1 до 10! {value} не приемлемо!')
         return value
 
     def validate(self, data):
