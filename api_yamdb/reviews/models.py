@@ -1,3 +1,4 @@
+import datetime as dt
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth import get_user_model
@@ -6,6 +7,7 @@ from .constants import (
     MAX_LENGTH,
     MAX_SCORE,
     MIN_SCORE,
+    MIN_YEAR,
     NAME_MAX_LENGTH,
     SLUG_MAX_LENGTH,
 )
@@ -63,7 +65,16 @@ class Title(models.Model):
         blank=True,
         null=True,
     )
-    year = models.IntegerField(verbose_name='Год выпуска')
+    year = models.IntegerField(
+        verbose_name='Год выпуска',
+        validators=[
+            MinValueValidator(MIN_YEAR, message='Год не может быть меньше 1'),
+            MaxValueValidator(
+                dt.date.today().year,
+                message='Год не может быть больше текущего'
+            )
+        ]
+    )
     category = models.ForeignKey(
         Category,
         null=True,
@@ -76,21 +87,14 @@ class Title(models.Model):
         verbose_name='Жанр',
     )
 
-    def __str__(self):
-        return self.name[:MAX_LENGTH]
-
-    @property
-    def rating(self):
-        reviews = self.reviews.all()
-        if not reviews:
-            return None
-        return sum(review.score for review in reviews) / len(reviews)
-
     class Meta:
         default_related_name = 'titles'
         ordering = ('name',)
         verbose_name = 'произведение'
         verbose_name_plural = 'Произведения'
+
+    def __str__(self):
+        return self.name[:MAX_LENGTH]
 
 
 class TitleGenre(models.Model):

@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 
 from reviews.models import Category, Genre, Title, Review, Comment
+from reviews.constants import MIN_SCORE, MAX_SCORE
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -21,6 +22,7 @@ class GenreSerializer(serializers.ModelSerializer):
 class TitleSerializer(serializers.ModelSerializer):
     genre = GenreSerializer(many=True)
     category = CategorySerializer()
+    rating = serializers.FloatField(source='avg_rating', read_only=True)
 
     class Meta:
         model = Title
@@ -74,9 +76,10 @@ class ReviewSerializer(serializers.ModelSerializer):
         exclude = ('title',)
 
     def validate_score(self, value):
-        if not (1 <= value <= 10):
+
+        if not (MIN_SCORE <= value <= MAX_SCORE):
             raise serializers.ValidationError(
-                f'Оценивать можно только от 1 до 10! {value} не приемлемо!')
+                f'Оценивать можно только от {MIN_SCORE} до {MAX_SCORE}! {value} не приемлемо!')
         return value
 
     def validate(self, data):
