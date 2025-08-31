@@ -1,3 +1,5 @@
+"""Команда для загрузки данных из CSV файлов."""
+
 import csv
 import os
 from django.conf import settings
@@ -17,12 +19,16 @@ CSV_DIR = settings.DATA_TO_LOAD_DIR
 
 
 class Command(BaseCommand):
+    """Команда для загрузки данных из CSV файлов."""
+
     help = 'Наполнение отдельных таблиц базы данными'
 
     def add_arguments(self, parser):
+        """Добавляет аргументы командной строки."""
         parser.add_argument('csv_files', nargs='+', type=str)
 
     def handle(self, *args, **kwargs):
+        """Обрабатывает команду загрузки данных."""
         csv_files = kwargs['csv_files']
         equals = {
             'category.csv': Category,

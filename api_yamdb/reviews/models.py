@@ -1,3 +1,5 @@
+"""Модели для приложения reviews."""
+
 import datetime as dt
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -16,6 +18,8 @@ User = get_user_model()
 
 
 class Category(models.Model):
+    """Модель категории."""
+
     name = models.CharField(
         max_length=NAME_MAX_LENGTH,
         verbose_name='Название категории',
@@ -27,15 +31,20 @@ class Category(models.Model):
     )
 
     def __str__(self):
+        """Строковое представление категории."""
         return self.name[:MAX_LENGTH]
 
     class Meta:
+        """Мета-класс для модели Category."""
+
         ordering = ('name',)
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
 
 
 class Genre(models.Model):
+    """Модель жанра."""
+
     name = models.CharField(
         max_length=NAME_MAX_LENGTH,
         verbose_name='Название жанра',
@@ -47,15 +56,20 @@ class Genre(models.Model):
     )
 
     def __str__(self):
+        """Строковое представление жанра."""
         return self.name[:MAX_LENGTH]
 
     class Meta:
+        """Мета-класс для модели Genre."""
+
         ordering = ('name',)
         verbose_name = 'жанр'
         verbose_name_plural = 'Жанры'
 
 
 class Title(models.Model):
+    """Модель произведения."""
+
     name = models.CharField(
         max_length=NAME_MAX_LENGTH,
         verbose_name='Наименование'
@@ -88,16 +102,21 @@ class Title(models.Model):
     )
 
     class Meta:
+        """Мета-класс для модели Title."""
+
         default_related_name = 'titles'
         ordering = ('name',)
         verbose_name = 'произведение'
         verbose_name_plural = 'Произведения'
 
     def __str__(self):
+        """Строковое представление произведения."""
         return self.name[:MAX_LENGTH]
 
 
 class TitleGenre(models.Model):
+    """Промежуточная модель для связи Title и Genre."""
+
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
@@ -108,10 +127,13 @@ class TitleGenre(models.Model):
     )
 
     def __str__(self):
+        """Строковое представление связи Title-Genre."""
         return f'{self.title} - {self.genre}'
 
 
 class Review(models.Model):
+    """Модель отзыва."""
+
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
@@ -138,11 +160,15 @@ class Review(models.Model):
     )
 
     class Meta:
+        """Мета-класс для модели Review."""
+
         constraints = [models.UniqueConstraint(fields=['title', 'author'],
                                                name='unique_review')]
 
 
 class Comment(models.Model):
+    """Модель комментария."""
+
     review = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
