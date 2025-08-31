@@ -30,5 +30,5 @@ class IsAdminOrSuperuser(permissions.BasePermission):
         """Проверяет разрешение для запроса."""
         return (
             request.user.is_authenticated
-            and (request.user.is_staff or request.user.role == 'admin')
+            and (request.user.is_staff or request.user.is_admin)
         )
