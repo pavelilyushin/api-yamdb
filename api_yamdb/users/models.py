@@ -64,3 +64,8 @@ class User(AbstractUser):
     def is_moderator(self):
         """Является ли пользователь модератором."""
         return self.role == self.Role.MODERATOR
+
+    @property
+    def is_user(self):
+        """Является ли пользователь обычным пользователем."""
+        return self.role == self.Role.USER
