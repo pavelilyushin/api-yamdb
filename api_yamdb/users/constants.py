@@ -1,3 +1,5 @@
+"""Константы для приложения users."""
+
 # Константы для пользователей
 USER_EMAIL_MAX_LENGTH = 254
 USER_BIO_MAX_LENGTH = 500

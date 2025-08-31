@@ -12,3 +12,6 @@ SLUG_MAX_LENGTH = 50
 # Валидация оценок
 MIN_SCORE = 1
 MAX_SCORE = 10
+
+# Валидация года
+MIN_YEAR = 1

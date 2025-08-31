@@ -1,3 +1,6 @@
+"""Модели для приложения reviews."""
+
+import datetime as dt
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth import get_user_model
@@ -6,6 +9,7 @@ from .constants import (
     MAX_LENGTH,
     MAX_SCORE,
     MIN_SCORE,
+    MIN_YEAR,
     NAME_MAX_LENGTH,
     SLUG_MAX_LENGTH,
 )
@@ -14,6 +18,8 @@ User = get_user_model()
 
 
 class Category(models.Model):
+    """Модель категории."""
+
     name = models.CharField(
         max_length=NAME_MAX_LENGTH,
         verbose_name='Название категории',
@@ -25,15 +31,20 @@ class Category(models.Model):
     )
 
     def __str__(self):
+        """Строковое представление категории."""
         return self.name[:MAX_LENGTH]
 
     class Meta:
+        """Мета-класс для модели Category."""
+
         ordering = ('name',)
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
 
 
 class Genre(models.Model):
+    """Модель жанра."""
+
     name = models.CharField(
         max_length=NAME_MAX_LENGTH,
         verbose_name='Название жанра',
@@ -45,15 +56,20 @@ class Genre(models.Model):
     )
 
     def __str__(self):
+        """Строковое представление жанра."""
         return self.name[:MAX_LENGTH]
 
     class Meta:
+        """Мета-класс для модели Genre."""
+
         ordering = ('name',)
         verbose_name = 'жанр'
         verbose_name_plural = 'Жанры'
 
 
 class Title(models.Model):
+    """Модель произведения."""
+
     name = models.CharField(
         max_length=NAME_MAX_LENGTH,
         verbose_name='Наименование'
@@ -63,7 +79,16 @@ class Title(models.Model):
         blank=True,
         null=True,
     )
-    year = models.IntegerField(verbose_name='Год выпуска')
+    year = models.IntegerField(
+        verbose_name='Год выпуска',
+        validators=[
+            MinValueValidator(MIN_YEAR, message='Год не может быть меньше 1'),
+            MaxValueValidator(
+                dt.date.today().year,
+                message='Год не может быть больше текущего'
+            )
+        ]
+    )
     category = models.ForeignKey(
         Category,
         null=True,
@@ -76,24 +101,22 @@ class Title(models.Model):
         verbose_name='Жанр',
     )
 
-    def __str__(self):
-        return self.name[:MAX_LENGTH]
-
-    @property
-    def rating(self):
-        reviews = self.reviews.all()
-        if not reviews:
-            return None
-        return sum(review.score for review in reviews) / len(reviews)
-
     class Meta:
+        """Мета-класс для модели Title."""
+
         default_related_name = 'titles'
         ordering = ('name',)
         verbose_name = 'произведение'
         verbose_name_plural = 'Произведения'
 
+    def __str__(self):
+        """Строковое представление произведения."""
+        return self.name[:MAX_LENGTH]
+
 
 class TitleGenre(models.Model):
+    """Промежуточная модель для связи Title и Genre."""
+
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
@@ -104,10 +127,13 @@ class TitleGenre(models.Model):
     )
 
     def __str__(self):
+        """Строковое представление связи Title-Genre."""
         return f'{self.title} - {self.genre}'
 
 
 class Review(models.Model):
+    """Модель отзыва."""
+
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
@@ -134,11 +160,15 @@ class Review(models.Model):
     )
 
     class Meta:
+        """Мета-класс для модели Review."""
+
         constraints = [models.UniqueConstraint(fields=['title', 'author'],
                                                name='unique_review')]
 
 
 class Comment(models.Model):
+    """Модель комментария."""
+
     review = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
